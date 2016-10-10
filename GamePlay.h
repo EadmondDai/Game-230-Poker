@@ -15,9 +15,18 @@ enum WinReward
 	WinFlush = 6
 };
 
+
 class GamePlay
 {
 private:
+	char StartIndex = 'a';
+	int CardsInHand = 5;
+
+	DeckManager DeckManagerObj;
+
+	Card *StartCard;
+	Card *EndCard;
+
 	int YourMoney;
 
 	// GameState 0, not in game, 1 in game.
@@ -46,7 +55,8 @@ private:
 	string WinStraight;
 	string WinFlush;
 
-	void PickACard();
+	void PickCardsFromDeck(int cardNumber);
+	Card *PickACardFromHand(int index);
 	
 	bool CheckOnePair();
 	bool CheckTwoPair();
@@ -55,7 +65,10 @@ private:
 	bool CheckFlush();
 
 public:
+	void SetDeckManager(DeckManager obj);
 	void ShowHand();
+	void MakeAChoice();
+	void GameResult();
 
 	bool IsInGame()
 	{

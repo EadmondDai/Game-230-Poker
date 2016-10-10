@@ -7,10 +7,13 @@
 int main()
 {
 	GamePlay NewGame;
-	
+	DeckManager DeckManagerObj;
+	NewGame.SetDeckManager(DeckManagerObj);
+
 	while (NewGame.IsInGame())
 	{
 		NewGame.ShowHand();
+		NewGame.MakeAChoice();
 	}
 
 	system("pause");

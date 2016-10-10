@@ -124,17 +124,6 @@ Card *DeckManager::PickACard()
 	return pickedCard;
 }
 
-void DeckManager::DiscardCards(Card *firstCard)
-{	
-	while (firstCard ->NextCard != nullptr)
-	{
-		firstCard = firstCard->NextCard;
-		delete firstCard->PrevieousCard;
-		firstCard->PrevieousCard = nullptr;
-	}
-	delete firstCard;
-}
-
 DeckManager::DeckManager()
 {
 	// Init random with time as seed.
