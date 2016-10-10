@@ -107,7 +107,7 @@ int DeckManager::GetNumbersOfCard()
 Card *DeckManager::PickACard()
 {
 	int deckCards = GetNumbersOfCard();
-
+	int targetCount = rand();
 
 }
 
