@@ -34,6 +34,7 @@ private:
 public:
 	void ResetDeck(Card *StartCard);
 	void ClearDeck();
+	void DiscardCards(Card *firstCard);
 	int GetNumbersOfCard();
 
 	Card *PickACard();

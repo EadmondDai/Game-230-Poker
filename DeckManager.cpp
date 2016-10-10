@@ -102,13 +102,37 @@ int DeckManager::GetNumbersOfCard()
 		tempCardPtr = tempCardPtr->NextCard;
 	}
 	return cardCount;
-}
+}   
 
 Card *DeckManager::PickACard()
 {
 	int deckCards = GetNumbersOfCard();
+	Card *pickedCard = StartCard;
 	int targetCount = rand();
+	targetCount = targetCount % deckCards;
+	while (targetCount >= 1)
+	{
+		pickedCard = pickedCard->NextCard;
+		targetCount--;
+	}
+	
+	pickedCard->PrevieousCard->NextCard = pickedCard->NextCard;
+	pickedCard->NextCard->PrevieousCard = pickedCard->PrevieousCard;
+	pickedCard->PrevieousCard = nullptr;
+	pickedCard->NextCard = nullptr;
 
+	return pickedCard;
+}
+
+void DeckManager::DiscardCards(Card *firstCard)
+{	
+	while (firstCard ->NextCard != nullptr)
+	{
+		firstCard = firstCard->NextCard;
+		delete firstCard->PrevieousCard;
+		firstCard->PrevieousCard = nullptr;
+	}
+	delete firstCard;
 }
 
 DeckManager::DeckManager()
