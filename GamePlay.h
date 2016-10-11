@@ -56,7 +56,7 @@ private:
 	string WinFlush;
 
 	void PickCardsFromDeck(int cardNumber);
-	Card *PickACardFromHand(int index);
+	void DiscardUnwantedCard(); // Should not use index for this.
 	
 	bool CheckOnePair();
 	bool CheckTwoPair();

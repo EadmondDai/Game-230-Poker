@@ -37,6 +37,7 @@ private:
 public:
 	void ResetDeck(Card *StartCard);
 	void ClearDeck();
+	void ShowDeck();
 	
 	int GetNumbersOfCard();
 
@@ -61,11 +62,4 @@ void DiscardCards(Card *firstCard)
 		//firstCard->PrevieousCard = nullptr;  In fact, do not need this line;
 	}
 	delete firstCard;
-}
-
-void ShowCard(Card *firstCard)
-{
-
-
-
 }

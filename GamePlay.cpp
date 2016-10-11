@@ -102,14 +102,24 @@ void GamePlay::MakeAChoice()
 	}
 
 
-	Card *newStartCard = nullptr;
-	Card *newEndCard = nullptr;
+	Card *countCard = nullptr;
 	// Ckeck if the input string contains index for the cards on hand.
+	// My new solution is iterate through both cards and index. 
+	// Change the flag of wanted cards, then discard all the left unwanted.
 	for (int i = 0; i < CardsInHand; i++)
 	{
+		if (i == 0)
+		{
+			countCard = StartCard;
+		}
+		else
+		{
+			countCard = countCard->NextCard;
+		}
+
 		if (command.find(char(StartIndex + i)))
 		{
-			Card *newCard = PickACardFromHand(i);
+			countCard->IfKept = true;
 		}
 	}
 
@@ -121,43 +131,39 @@ void GamePlay::GameResult()
 
 }
 
-Card *GamePlay::PickACardFromHand(int index)
+void GamePlay::DiscardUnwantedCard()
 {
-	if (index >= CardsInHand)
-	{
-		cout << "You do not have that many cards." << endl;
-		return;
-	}
+	Card *returnCard = StartCard;
 
-	Card *returnCard = nullptr;
-	returnCard = StartCard;
-	index--;
-	while (index >= 0)
+	while (returnCard != nullptr)
 	{
-		returnCard = returnCard->NextCard;
-		index--;
-	}
+		if (returnCard->IfKept == false)
+		{
+			bool previeousHaveCard = returnCard->PrevieousCard != nullptr;
+			bool nextHaveCard = returnCard->NextCard != nullptr;
 
-	bool previeousHaveCard = returnCard->PrevieousCard != nullptr;
-	bool nextHaveCard = returnCard->NextCard != nullptr;
-	
-	if (previeousHaveCard && nextHaveCard)
-	{
-		returnCard->PrevieousCard->NextCard = returnCard->NextCard;
-		returnCard->NextCard->PrevieousCard = returnCard->PrevieousCard;
+			if (previeousHaveCard && nextHaveCard)
+			{
+				returnCard->PrevieousCard->NextCard = returnCard->NextCard;
+				returnCard->NextCard->PrevieousCard = returnCard->PrevieousCard;
+				Card *tempCard = returnCard;
+				returnCard = returnCard->NextCard;
+				delete tempCard;
+			}
+			else if (previeousHaveCard && !nextHaveCard)
+			{
+				returnCard = returnCard->PrevieousCard;
+				delete returnCard->NextCard;
+				returnCard->NextCard = nullptr;
+			}
+			else if (!previeousHaveCard && nextHaveCard)
+			{
+				returnCard = returnCard->NextCard;
+				delete returnCard->PrevieousCard;
+				returnCard->PrevieousCard = nullptr;
+			}
+		}
 	}
-	else if (previeousHaveCard && !nextHaveCard)
-	{
-		returnCard->PrevieousCard->NextCard = nullptr;
-	}
-	else if (!previeousHaveCard && nextHaveCard)
-	{
-		returnCard->NextCard->PrevieousCard = nullptr;
-	}
-	returnCard->PrevieousCard = nullptr;
-	returnCard->NextCard = nullptr;
-
-	return returnCard;
 }
 
 void GamePlay::SetDeckManager(DeckManager obj)

@@ -124,6 +124,11 @@ Card *DeckManager::PickACard()
 	return pickedCard;
 }
 
+void DeckManager::ShowDeck()
+{
+
+}
+
 DeckManager::DeckManager()
 {
 	// Init random with time as seed.
