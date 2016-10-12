@@ -127,9 +127,25 @@ void GamePlay::GetNewCards()
 	// First clear the abandoned card. And sort the linked list.
 	// Then get new cards form the deck.
 	Card *tempCard = StartCard;
-	while (startca)
+	while (tempCard != nullptr)
 	{
+		if (tempCard->IfKept == false)
+		{
+			bool leftHave = tempCard->PrevieousCard != nullptr;
+			bool rightHave = tempCard->NextCard != nullptr;
+			if (leftHave && rightHave)
+			{
 
+			}
+			else if (leftHave && !rightHave)
+			{
+
+			}
+			else if (!leftHave && rightHave)
+			{
+
+			}
+		}
 	}
 
 }
