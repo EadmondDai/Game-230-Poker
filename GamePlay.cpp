@@ -68,18 +68,14 @@ void GamePlay::MakeAChoice()
 
 	if (command == ViewDeckCommand)
 	{
-		ShowCard(DeckManagerObj.GetStartCard());
+		ShowHand();
 		MakeAChoice();
 		return;
 	}
 
 	if (command == DiscardAllCommand)
 	{
-
-		DiscardCards(StartCard);
-		StartCard = nullptr;
-		EndCard = nullptr;
-		GameResult();
+		GetNewCards();
 		return;
 	}
 
@@ -125,6 +121,18 @@ void GamePlay::MakeAChoice()
 
 }
 
+void GamePlay::GetNewCards()
+{
+	// There are two steps for getting new cards.
+	// First clear the abandoned card. And sort the linked list.
+	// Then get new cards form the deck.
+	Card *tempCard = StartCard;
+	while (startca)
+	{
+
+	}
+
+}
 
 void GamePlay::GameResult()
 {

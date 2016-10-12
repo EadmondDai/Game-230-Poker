@@ -53,13 +53,13 @@ public:
 
 // These function I should really put them in a separate file.
 
-void DiscardCards(Card *firstCard)
-{
-	while (firstCard->NextCard != nullptr)
-	{
-		firstCard = firstCard->NextCard;
-		delete firstCard->PrevieousCard;
-		//firstCard->PrevieousCard = nullptr;  In fact, do not need this line;
-	}
-	delete firstCard;
-}
+//void DiscardCards(Card *firstCard)
+//{
+//	while (firstCard->NextCard != nullptr)
+//	{
+//		firstCard = firstCard->NextCard;
+//		delete firstCard->PrevieousCard;
+//		//firstCard->PrevieousCard = nullptr;  In fact, do not need this line;
+//	}
+//	delete firstCard;
+//}

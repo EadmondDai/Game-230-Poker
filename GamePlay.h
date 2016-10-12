@@ -58,6 +58,8 @@ private:
 	void PickCardsFromDeck(int cardNumber);
 	void DiscardUnwantedCard(); // Should not use index for this.
 	
+	void GetNewCards();
+
 	bool CheckOnePair();
 	bool CheckTwoPair();
 	bool CheckThreeKind();
