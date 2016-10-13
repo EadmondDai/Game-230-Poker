@@ -151,10 +151,19 @@ void DeckManager::ShowDeck()
 	// Use a temp pointer go through the pokers on player's hand.
 	Card *tempShowCard = StartCard;
 
+	int warpCount = WarpNumber;
 	while (tempShowCard != nullptr)
 	{
 		//printf("%n of %s , ", tempShowCard->Number, MySuitName[tempShowCard->CardSuit]);
+		cout << tempShowCard->Number << " of " << MySuitName[tempShowCard->CardSuit] << " , ";
 		tempShowCard = tempShowCard->NextCard;
+
+		warpCount--;
+		if (warpCount < 0)
+		{
+			cout << endl;
+			warpCount = WarpNumber;
+		}
 	}
 }
 

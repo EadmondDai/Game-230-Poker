@@ -64,7 +64,7 @@ void GamePlay::MakeAChoice()
 
 	if (command == ViewDeckCommand)
 	{
-		ShowHand();
+		DeckManagerObj.ShowDeck();
 		MakeAChoice();
 		return;
 	}
@@ -109,12 +109,16 @@ void GamePlay::MakeAChoice()
 			countCard = countCard->NextCard;
 		}
 
-		if (command.find(char(StartIndex + i)))
+		cout << " command -- " << command << "  i  --" << i << " char(StartIndex + i) " << char(StartIndex + i) << endl;;
+		
+		if (command.find(char(StartIndex + i)) != command.npos)
 		{
 			countCard->IfKept = true;
 		}
 	}
 
+	GetNewCards();
+	GameResult();
 }
 
 void GamePlay::GetNewCards()
@@ -167,6 +171,10 @@ void GamePlay::GetNewCards()
 				}
 
 				cardCount++;
+			}
+			else
+			{
+				tempCard = tempCard->NextCard;
 			}
 		}
 	}

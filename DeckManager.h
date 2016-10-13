@@ -34,6 +34,7 @@ class DeckManager
 {
 
 private:
+	int WarpNumber = 6;
 	int NumberOfEachSuit = 13;
 	Card * StartCard = nullptr;
 	Card * EndCard = nullptr;
