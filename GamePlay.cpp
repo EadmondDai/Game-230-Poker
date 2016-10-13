@@ -2,7 +2,6 @@
 
 void GamePlay::ShowHand()
 {
-
 	cout << YoursCardDes << endl;
 
 	// Use a temp pointer go through the pokers on player's hand.
@@ -10,18 +9,15 @@ void GamePlay::ShowHand()
 
 	while (tempShowCard != nullptr)
 	{
-		cout << "You got " << tempShowCard->Number << "of" << SuitName[tempShowCard->CardSuit];
+		cout << "You got " << tempShowCard->Number << " of " << MySuitName[tempShowCard->CardSuit];
 		if (tempShowCard->IfKept)
 		{
-			cout << "(kept)";
+			cout << "(kept) ";
 			tempShowCard->IfKept = false;
 		}
-		cout << endl;
+		cout << "\n";
 		tempShowCard = tempShowCard->NextCard;
 	}
-
-	
-
 }
 
 void GamePlay::PickCardsFromDeck(int cardNumber)
@@ -59,7 +55,7 @@ void GamePlay::PickCardsFromDeck(int cardNumber)
 
 void GamePlay::MakeAChoice()
 {
-	cout << ChoiceTimeDes << endl;
+	cout << ChoiceTimeDes;
 
 	string command;
 	cin >> command;
@@ -127,27 +123,56 @@ void GamePlay::GetNewCards()
 	// First clear the abandoned card. And sort the linked list.
 	// Then get new cards form the deck.
 	Card *tempCard = StartCard;
-	while (tempCard != nullptr)
+	int cardCount = 0;
+	if (tempCard == nullptr)
 	{
-		if (tempCard->IfKept == false)
+		cardCount = CardsInHand;
+	}
+	else
+	{
+		while (tempCard != nullptr)
 		{
-			bool leftHave = tempCard->PrevieousCard != nullptr;
-			bool rightHave = tempCard->NextCard != nullptr;
-			if (leftHave && rightHave)
+			if (tempCard->IfKept == false)
 			{
+				bool leftHave = tempCard->PrevieousCard != nullptr;
+				bool rightHave = tempCard->NextCard != nullptr;
+				if (leftHave && rightHave)
+				{
+					tempCard->PrevieousCard->NextCard = tempCard->NextCard;
+					tempCard->NextCard->PrevieousCard = tempCard->PrevieousCard;
+					Card *temp = tempCard->NextCard;
+					delete tempCard;
+					tempCard = temp;
+				}
+				else if (leftHave && !rightHave)
+				{
+					tempCard->PrevieousCard->NextCard = nullptr;
+					EndCard = tempCard->PrevieousCard;
+					delete tempCard;
+					tempCard = nullptr;
+				}
+				else if (!leftHave && rightHave)
+				{
+					StartCard = tempCard->NextCard;
+					tempCard = tempCard->NextCard;
+					delete tempCard->PrevieousCard;
+					tempCard->PrevieousCard = nullptr;
+					tempCard = nullptr;
+				}
+				else
+				{
+					StartCard = EndCard = nullptr;
+					delete tempCard;
+					tempCard = nullptr;
+				}
 
-			}
-			else if (leftHave && !rightHave)
-			{
-
-			}
-			else if (!leftHave && rightHave)
-			{
-
+				cardCount++;
 			}
 		}
 	}
 
+	// Then get new card and assert in.
+	PickCardsFromDeck(cardCount);
 }
 
 void GamePlay::GameResult()
@@ -188,6 +213,26 @@ void GamePlay::DiscardUnwantedCard()
 			}
 		}
 	}
+}
+
+void GamePlay::InitCards()
+{
+	//StartCard = new Card;
+	//Card *tempCard = StartCard;
+	//for (int i = 0; i < CardsInHand - 1; i++)
+	//{
+	//	tempCard->NextCard = new Card;
+	//	tempCard->NextCard->PrevieousCard = tempCard;
+	//	tempCard = tempCard->NextCard;
+
+	//	if (i == CardsInHand - 2)
+	//	{
+	//		EndCard = tempCard;
+	//	}
+	//}
+
+	GetNewCards();
+	//ShowHand();
 }
 
 void GamePlay::SetDeckManager(DeckManager obj)

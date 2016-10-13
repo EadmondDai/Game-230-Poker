@@ -2,11 +2,14 @@
 #include <set>
 #include <random>
 #include <time.h>
+#include <string>
+#include <iostream>
 
 
 using namespace std;
 
-enum Suit
+//Suit name;
+static enum Suit
 {
 	Spade,     // ??
 	Heart,     // ??
@@ -14,7 +17,8 @@ enum Suit
 	Club       // ??
 };
 
-string SuitName[] = { "Spade" , "Heart" , "Dianmond" , "Club" };
+// Make this global
+static string MySuitName[] = { "Spade" , "Heart" , "Dianmond" , "Club" };
 
 struct Card
 {
@@ -30,9 +34,9 @@ class DeckManager
 {
 
 private:
-	int NumberOfEachSuit;
-	Card * StartCard;
-	Card * EndCard;
+	int NumberOfEachSuit = 13;
+	Card * StartCard = nullptr;
+	Card * EndCard = nullptr;
 
 public:
 	void ResetDeck(Card *StartCard);

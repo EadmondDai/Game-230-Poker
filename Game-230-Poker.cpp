@@ -6,9 +6,11 @@
 
 int main()
 {
-	GamePlay NewGame;
 	DeckManager DeckManagerObj;
+	GamePlay NewGame;
+	
 	NewGame.SetDeckManager(DeckManagerObj);
+	NewGame.InitCards();
 
 	while (NewGame.IsInGame())
 	{

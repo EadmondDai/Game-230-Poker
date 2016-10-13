@@ -15,6 +15,7 @@ enum WinReward
 	WinFlush = 6
 };
 
+//string MySuitName[] = { "Spade" , "Heart" , "Dianmond" , "Club" };
 
 class GamePlay
 {
@@ -24,15 +25,13 @@ private:
 
 	DeckManager DeckManagerObj;
 
-	Card *StartCard;
-	Card *EndCard;
+	Card *StartCard = nullptr;
+	Card *EndCard = nullptr;
 
 	int YourMoney;
 
 	// GameState 0, not in game, 1 in game.
 	int GameState = 1;
-
-	Card *StartCard = nullptr;
 
 	string Prologue;
 	string YoursCardDes;
@@ -71,6 +70,7 @@ public:
 	void ShowHand();
 	void MakeAChoice();
 	void GameResult();
+	void InitCards();
 
 	bool IsInGame()
 	{
