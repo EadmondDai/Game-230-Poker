@@ -39,6 +39,8 @@ private:
 	Card * StartCard = nullptr;
 	Card * EndCard = nullptr;
 
+	void DiscardUnwantedCard();
+
 public:
 	void ResetDeck(Card *StartCard);
 	void ClearDeck();

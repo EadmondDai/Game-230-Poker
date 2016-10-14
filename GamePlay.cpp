@@ -18,13 +18,17 @@ void GamePlay::ShowHand()
 	if (GameState == 0)
 		return;
 
-	cout << YoursCardDes << endl;
+	cout << endl << YoursCardDes << endl;
 
 	// Use a temp pointer go through the pokers on player's hand.
 	Card *tempShowCard = StartCard;
 
+	int count = 0;
 	while (tempShowCard != nullptr)
 	{
+		// Show the index.
+		cout << (char)(StartIndex + count) << " : ";
+
 		cout << "You got " << tempShowCard->Number << " of " << MySuitName[tempShowCard->CardSuit];
 		if (tempShowCard->IfKept)
 		{
@@ -33,7 +37,11 @@ void GamePlay::ShowHand()
 		}
 		cout << "\n";
 		tempShowCard = tempShowCard->NextCard;
+
+		count++;
 	}
+
+	cout << endl;
 }
 
 void GamePlay::PickCardsFromDeck(int cardNumber)
@@ -42,6 +50,7 @@ void GamePlay::PickCardsFromDeck(int cardNumber)
 	{
 		DeckManagerObj.ResetDeck(StartCard);
 	}
+	cout << DeckManagerObj.GetNumbersOfCard() << endl;
 
 	Card *newCard = DeckManagerObj.PickACard();
 	if (StartCard == nullptr)
@@ -73,6 +82,9 @@ void GamePlay::MakeAChoice()
 {
 	if (GameState == 0)
 		return;
+
+	// How many card there in the deck.
+	cout << DeckNumberDes << DeckManagerObj.GetNumbersOfCard() << endl;
 
 	cout << ChoiceTimeDes;
 
@@ -107,6 +119,7 @@ void GamePlay::MakeAChoice()
 			tempCard = tempCard->NextCard;
 		}
 
+		ShowHand();
 		//GameResultCheck();
 		return;
 	}
@@ -169,6 +182,7 @@ void GamePlay::GetNewCards()
 			{
 				bool leftHave = tempCard->PrevieousCard != nullptr;
 				bool rightHave = tempCard->NextCard != nullptr;
+
 				if (leftHave && rightHave)
 				{
 					tempCard->PrevieousCard->NextCard = tempCard->NextCard;
@@ -288,6 +302,7 @@ bool GamePlay::CheckFlush()
 		{
 			return false;
 		}
+		tempCard = tempCard->NextCard;
 	}
 	return true;
 }
@@ -393,40 +408,6 @@ bool GamePlay::CheckOnePair()
 }
 
 
-void GamePlay::DiscardUnwantedCard()
-{
-	Card *returnCard = StartCard;
-
-	while (returnCard != nullptr)
-	{
-		if (returnCard->IfKept == false)
-		{
-			bool previeousHaveCard = returnCard->PrevieousCard != nullptr;
-			bool nextHaveCard = returnCard->NextCard != nullptr;
-
-			if (previeousHaveCard && nextHaveCard)
-			{
-				returnCard->PrevieousCard->NextCard = returnCard->NextCard;
-				returnCard->NextCard->PrevieousCard = returnCard->PrevieousCard;
-				Card *tempCard = returnCard;
-				returnCard = returnCard->NextCard;
-				delete tempCard;
-			}
-			else if (previeousHaveCard && !nextHaveCard)
-			{
-				returnCard = returnCard->PrevieousCard;
-				delete returnCard->NextCard;
-				returnCard->NextCard = nullptr;
-			}
-			else if (!previeousHaveCard && nextHaveCard)
-			{
-				returnCard = returnCard->NextCard;
-				delete returnCard->PrevieousCard;
-				returnCard->PrevieousCard = nullptr;
-			}
-		}
-	}
-}
 
 void GamePlay::InitCards()
 {
@@ -455,13 +436,13 @@ void GamePlay::SetDeckManager(DeckManager obj)
 
 GamePlay::GamePlay()
 {
-	Prologue = "Welcome to Video Poker!";
+	//Prologue = "Welcome to Video Poker!";
 	YourMoneyDes = "You have $";
 	YoursCardDes = "Your hand contains:";
 	YouPayDes = "You pay a $1 ante and now have $";
 	GameOverDes = "You lost all your money. Game Over!";
 	ChoiceTimeDes = "OPTIONS...\n- Type the letters for the cards you wish to keep. (i.e., ""acd"")\n- Type ""deck"" to view the cards remaining in the deck.\n- Type ""none"" to discard all cards in your hand.\n- Type ""all"" to keep all cards in your hand.\n- Type ""exit"" to exit the game.\n- Type ""swap"" to CHEAT and swap a card in your hand with one in the deck.\nYOUR CHOICE : ";
-	DeckNumberDes = "The deck contains %n cards.";
+	DeckNumberDes = "Cards left in the deck: ";
 	LastChoiceDes = "You kept %n and drew %n cards";
 
 	ViewDeckCommand = "deck";

@@ -36,7 +36,7 @@ private:
 	// GameState 0, not in game, 1 in game.
 	int GameState = 1;
 
-	string Prologue;
+	//string Prologue;
 	string YoursCardDes;
 	string YourMoneyDes;
 	string YouPayDes;

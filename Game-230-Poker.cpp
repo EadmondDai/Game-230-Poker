@@ -6,6 +6,8 @@
 
 int main()
 {
+	cout << "Welcome to Video Poker!" << endl;
+
 	DeckManager DeckManagerObj;
 	GamePlay NewGame;
 	
