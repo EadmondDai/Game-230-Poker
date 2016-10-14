@@ -14,8 +14,9 @@ int main()
 
 	while (NewGame.IsInGame())
 	{
-		NewGame.ShowHand();
+		NewGame.BetMoney();
 		NewGame.MakeAChoice();
+		NewGame.GameResultCheck();
 	}
 
 	system("pause");

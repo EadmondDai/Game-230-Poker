@@ -3,6 +3,9 @@
 #include <string>
 #include <iostream>
 #include "DeckManager.h"
+#include <vector>
+#include <algorithm>
+#include <map>
 
 using namespace std;
 
@@ -28,7 +31,7 @@ private:
 	Card *StartCard = nullptr;
 	Card *EndCard = nullptr;
 
-	int YourMoney;
+	int YourMoney = 10;
 
 	// GameState 0, not in game, 1 in game.
 	int GameState = 1;
@@ -68,8 +71,9 @@ private:
 public:
 	void SetDeckManager(DeckManager obj);
 	void ShowHand();
+	void BetMoney();
 	void MakeAChoice();
-	void GameResult();
+	void GameResultCheck();
 	void InitCards();
 
 	bool IsInGame()
