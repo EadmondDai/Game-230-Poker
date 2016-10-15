@@ -201,7 +201,7 @@ void DeckManager::ShowDeck()
 	while (tempShowCard != nullptr)
 	{
 		//printf("%n of %s , ", tempShowCard->Number, MySuitName[tempShowCard->CardSuit]);
-		cout << tempShowCard->Number << " of " << MySuitName[tempShowCard->CardSuit];
+		cout << CardShowVector[tempShowCard->Number] << " of " << MySuitName[tempShowCard->CardSuit];
 		if (tempShowCard->NextCard != nullptr)
 		{
 			cout << " , ";
@@ -221,11 +221,25 @@ void DeckManager::ShowDeck()
 	}
 }
 
+vector<string> DeckManager::GetCardShowVector()
+{
+	return CardShowVector;
+}
+
 DeckManager::DeckManager()
 {
 	// Init random with time as seed.
 	srand((unsigned) time(NULL));
 	ResetDeck(nullptr);
+
+	CardShowVector.push_back("Ace");
+	for (int i = 1; i < 10; i++)
+	{
+		CardShowVector.push_back(to_string(i));
+	}
+	CardShowVector.push_back("Jack");
+	CardShowVector.push_back("Queen");
+	CardShowVector.push_back("King");
 }
 
 

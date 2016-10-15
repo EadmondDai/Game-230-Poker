@@ -8,7 +8,7 @@
 
 using namespace std;
 
-//Suit name;
+// Suit name;
 static enum Suit
 {
 	Spade,     // ??
@@ -52,6 +52,10 @@ public:
 
 	Card *PickACard();
 
+	// Card Showing Name
+	vector<string> CardShowVector;
+
+	vector<string> GetCardShowVector();
 
 	DeckManager();
 	~DeckManager();

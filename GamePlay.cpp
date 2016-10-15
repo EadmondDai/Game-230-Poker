@@ -5,6 +5,7 @@ void GamePlay::BetMoney()
 	YourMoney--;
 	if (YourMoney < 0)
 	{
+		cout << GameOverDes << endl;
 		GameState = 0;
 		return;
 	}
@@ -23,13 +24,15 @@ void GamePlay::ShowHand()
 	// Use a temp pointer go through the pokers on player's hand.
 	Card *tempShowCard = StartCard;
 
+	vector<string> cardShowName = DeckManagerObj.GetCardShowVector();
+
 	int count = 0;
 	while (tempShowCard != nullptr)
 	{
 		// Show the index.
 		cout << (char)(StartIndex + count) << " : ";
 
-		cout << "You got " << tempShowCard->Number << " of " << MySuitName[tempShowCard->CardSuit];
+		cout << "You got " << cardShowName[tempShowCard->Number] << " of " << MySuitName[tempShowCard->CardSuit];
 		if (tempShowCard->IfKept)
 		{
 			cout << "(kept) ";
@@ -50,7 +53,6 @@ void GamePlay::PickCardsFromDeck(int cardNumber)
 	{
 		DeckManagerObj.ResetDeck(StartCard);
 	}
-	cout << DeckManagerObj.GetNumbersOfCard() << endl;
 
 	Card *newCard = DeckManagerObj.PickACard();
 	if (StartCard == nullptr)
@@ -141,6 +143,7 @@ void GamePlay::MakeAChoice()
 	// Ckeck if the input string contains index for the cards on hand.
 	// My new solution is iterate through both cards and index. 
 	// Change the flag of wanted cards, then discard all the left unwanted.
+	int count = 0;
 	for (int i = 0; i < CardsInHand; i++)
 	{
 		if (i == 0)
@@ -155,8 +158,11 @@ void GamePlay::MakeAChoice()
 		if (command.find(char(StartIndex + i)) != command.npos)
 		{
 			countCard->IfKept = true;
+			count++;
 		}
 	}
+
+	cout << LastChoiceDes << count << " and " << (CardsInHand - count) << endl;
 
 	GetNewCards();
 	ShowHand();
@@ -443,7 +449,7 @@ GamePlay::GamePlay()
 	GameOverDes = "You lost all your money. Game Over!";
 	ChoiceTimeDes = "OPTIONS...\n- Type the letters for the cards you wish to keep. (i.e., ""acd"")\n- Type ""deck"" to view the cards remaining in the deck.\n- Type ""none"" to discard all cards in your hand.\n- Type ""all"" to keep all cards in your hand.\n- Type ""exit"" to exit the game.\n- Type ""swap"" to CHEAT and swap a card in your hand with one in the deck.\nYOUR CHOICE : ";
 	DeckNumberDes = "Cards left in the deck: ";
-	LastChoiceDes = "You kept %n and drew %n cards";
+	LastChoiceDes = "Here is the number of cards your kept and drew: ";
 
 	ViewDeckCommand = "deck";
 	DiscardAllCommand = "none";

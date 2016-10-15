@@ -19,6 +19,7 @@ int main()
 		NewGame.BetMoney();
 		NewGame.MakeAChoice();
 		NewGame.GameResultCheck();
+		system("pause");
 	}
 
 	system("pause");
