@@ -1,3 +1,14 @@
+#define _CRTDBG_MAP_ALLOC
+#define _CRTDBG_MAP_ALLOC_NEW
+#include <cstdlib>
+#include <crtdbg.h>
+#ifdef _DEBUG
+#ifndef DBG_NEW
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+#define new DBG_NEW
+#endif
+#endif
+
 #include "GamePlay.h"
 
 void GamePlay::BetMoney()
@@ -129,12 +140,13 @@ void GamePlay::MakeAChoice()
 	if (command == ExitCommand)
 	{
 		GameState = 0;
+		DeckManager deck = DeckManagerObj;
 		return;
 	}
 
 	if (command == SwapCommand)
 	{
-
+		CheatSwap();
 		return;
 	}
 
@@ -162,7 +174,7 @@ void GamePlay::MakeAChoice()
 		}
 	}
 
-	cout << LastChoiceDes << count << " and " << (CardsInHand - count) << endl;
+	cout << LastChoiceDes << count << endl;
 
 	GetNewCards();
 	ShowHand();
@@ -210,7 +222,6 @@ void GamePlay::GetNewCards()
 					tempCard = tempCard->NextCard;
 					delete tempCard->PrevieousCard;
 					tempCard->PrevieousCard = nullptr;
-					//tempCard = nullptr;
 				}
 				else
 				{
@@ -413,26 +424,226 @@ bool GamePlay::CheckOnePair()
 	return false;
 }
 
+void GamePlay::ClearCards()
+{
+	if (StartCard == nullptr)
+		return;
 
+	Card *tempCard = StartCard;
+
+	int count = 0;
+	while (StartCard != nullptr)
+	{
+		//if (returnCard->IfKept == false)
+		//{
+		//bool previeousHaveCard = tempCard->PrevieousCard != nullptr;
+		//bool nextHaveCard = tempCard->NextCard != nullptr;
+
+		//if (previeousHaveCard && nextHaveCard)
+		//{
+		//	tempCard->PrevieousCard->NextCard = tempCard->NextCard;
+		//	tempCard->NextCard->PrevieousCard = tempCard->PrevieousCard;
+		//	Card *temp = tempCard;
+		//	tempCard = tempCard->NextCard;
+		//	delete temp;
+		//}
+		//else if (previeousHaveCard && !nextHaveCard)
+		//{
+		//	tempCard->PrevieousCard->NextCard = nullptr;
+		//	delete tempCard;
+		//	tempCard = nullptr;
+		//}
+		//else if (!previeousHaveCard && nextHaveCard)
+		//{
+		//	tempCard = tempCard->NextCard;
+		//	delete tempCard->PrevieousCard;
+		//	tempCard->PrevieousCard = nullptr;
+		//}
+		//else
+		//{
+		//	delete tempCard;
+		//	tempCard = nullptr;
+		//}
+		//}
+		
+		tempCard = StartCard->NextCard;
+		delete StartCard;
+		StartCard = tempCard;
+		count++;
+	}
+	cout << count;
+}
+
+void GamePlay::CheatSwap()
+{
+	Card *myCard = nullptr;
+	Card *deckCard = nullptr;
+	int deckCardNum;
+	int deckCardSuit;
+
+	while (true)
+	{
+		cout << SelectACardToSwapDes << endl;
+		string SelectCardStr;
+	
+		cin >> SelectCardStr;
+		cin.clear();
+		cin.ignore(1000, '\n');
+
+		if (SelectCardStr == ExitCommand)
+		{
+			GameState = 0;
+			return;
+		}
+
+		if (SelectCardStr[0] < 'a' || SelectCardStr[0] > 'e')
+		{
+			cout << InvalidInput << endl;
+			ShowHand();
+			MakeAChoice();
+			return;
+		}
+		else
+		{
+			int count = StartIndex + CardsInHand - SelectCardStr[0];
+			Card *temp = StartCard;
+			count--;
+			while (count > 0)
+			{
+				temp = temp->NextCard;
+				count--;
+			}
+			myCard = temp;
+			break;
+		}
+	}
+
+	while (true)
+	{
+		cout << DeckNumberDes << endl;
+
+		string SelectNumStr;
+		cin >> SelectNumStr;
+		cin.clear();
+		cin.ignore(1000, '\n');
+
+		if (SelectNumStr == ExitCommand)
+		{
+			GameState = 0;
+			return;
+		}
+
+		int inputNum = stoi(SelectNumStr);
+		if (inputNum <= 0 || inputNum > NumberOfEachSuit)
+		{
+			cout << InvalidInput << endl;
+			ShowHand();
+			MakeAChoice();
+			return;
+		}
+		else
+		{
+			deckCardNum = inputNum;
+			break;
+		}
+
+	}
+
+	while (true)
+	{
+		cout << SuitYouWantDes << endl;
+
+		string SelectSuitStr;
+		cin >> SelectSuitStr;
+		cin.clear();
+		cin.ignore(1000, '\n');
+
+		if (SelectSuitStr == ExitCommand)
+		{
+			GameState = 0;
+			return;
+		}
+
+		int inputSuit = stoi(SelectSuitStr);
+		if (inputSuit < Suit::Club || inputSuit > Suit::Spade)
+		{
+			cout << InvalidInput << endl;
+			ShowHand();
+			MakeAChoice();
+			return;
+		}
+		else
+		{
+			deckCardSuit = inputSuit;
+			break;
+		}
+	}
+
+	deckCard = DeckManagerObj.PickACardWithNumAndSuit(deckCardNum - 1, deckCardSuit);
+	if (deckCard == nullptr)
+	{
+		cout << DeckCardNotFount << endl;
+	}
+	else
+	{
+		DoSwap(myCard, deckCard);
+	}
+	ShowHand();
+	MakeAChoice();
+	return;
+}
+
+void GamePlay::DoSwap(Card* cardOne, Card* cardTwo)
+{
+	Card* temp;
+	temp = cardOne;
+
+	// Move cardOne to cardTwo.
+	if (cardTwo->PrevieousCard != nullptr)
+	{
+		cardTwo->PrevieousCard->NextCard = cardOne;
+		cardOne->PrevieousCard = cardTwo->PrevieousCard;
+	}
+	else
+	{
+		cardOne->PrevieousCard = nullptr;
+	}
+
+	if (cardTwo->NextCard != nullptr)
+	{
+		cardTwo->NextCard->PrevieousCard = cardOne;
+		cardOne->NextCard = cardTwo->NextCard;
+	}
+	else
+	{
+		cardOne->NextCard = nullptr;
+	}
+
+	// Then move cardTwo to cardOne.
+	if (temp->PrevieousCard != nullptr)
+	{
+		temp->PrevieousCard->NextCard = cardTwo;
+		cardTwo->PrevieousCard = temp->PrevieousCard;
+	}
+	else
+	{
+		cardTwo->PrevieousCard = nullptr;
+	}
+
+	if (temp->NextCard != nullptr)
+	{
+		temp->NextCard->PrevieousCard = cardTwo;
+		cardTwo->NextCard = temp->NextCard;
+	}
+	else
+	{
+		cardTwo->NextCard = nullptr;
+	}
+}
 
 void GamePlay::InitCards()
 {
-	//StartCard = new Card;
-	//Card *tempCard = StartCard;
-	//for (int i = 0; i < CardsInHand - 1; i++)
-	//{
-	//	tempCard->NextCard = new Card;
-	//	tempCard->NextCard->PrevieousCard = tempCard;
-	//	tempCard = tempCard->NextCard;
-
-	//	if (i == CardsInHand - 2)
-	//	{
-	//		EndCard = tempCard;
-	//	}
-	//}
-
 	GetNewCards();
-	//ShowHand();
 }
 
 void GamePlay::SetDeckManager(DeckManager obj)
@@ -447,15 +658,21 @@ GamePlay::GamePlay()
 	YoursCardDes = "Your hand contains:";
 	YouPayDes = "You pay a $1 ante and now have $";
 	GameOverDes = "You lost all your money. Game Over!";
-	ChoiceTimeDes = "OPTIONS...\n- Type the letters for the cards you wish to keep. (i.e., ""acd"")\n- Type ""deck"" to view the cards remaining in the deck.\n- Type ""none"" to discard all cards in your hand.\n- Type ""all"" to keep all cards in your hand.\n- Type ""exit"" to exit the game.\n- Type ""swap"" to CHEAT and swap a card in your hand with one in the deck.\nYOUR CHOICE : ";
+	ChoiceTimeDes = "OPTIONS...\n- Type the letters for the cards you wish to keep. (i.e., ""acd"")\n- Type ""deck"" to view the cards remaining in the deck.\n- Type ""none"" to discard all cards in your hand.\n- Type ""all"" to keep all cards in your hand.\n- Type ""exit"" to exit the game.\n- Type ""swap"" to CHEAT and swap a card in your hand with one in the deck.\nYou can only choose a card from your deck to swap with one in the deck.\n YOUR CHOICE : ";
 	DeckNumberDes = "Cards left in the deck: ";
-	LastChoiceDes = "Here is the number of cards your kept and drew: ";
+	LastChoiceDes = "Here is the number of cards your kept: ";
 
 	ViewDeckCommand = "deck";
 	DiscardAllCommand = "none";
 	KeepAllCommand = "all";
 	ExitCommand = "exit";
 	SwapCommand = "swap";
+
+	SelectACardToSwapDes = "Use a index like 'a' to choose a card. Accept only one card no matter how many you input. Input other staff wouldn't be accepted.";
+	ValueYouWantDes = "Chose a value you want from the deck. Better be the one deck contains( 1 - 13). Input value not showing in the deck is invalid.";
+	SuitYouWantDes = "Chose a suit you want through input a number. 0 for Club, 1 for Diamond, 2 for Heart, 3 for Spade. Other input wouldn't be accepted.";
+	InvalidInput = "Invalid input. See, even if you want to cheat, you still need to follow certain rules.";
+	DeckCardNotFount = "404 not found. Not sure what happened, but the card you want in the deck, is just a illusion, never existed.";
 
 	WinOnePair = "You won. You got at least one pair of jacks or higher";
 	WinTwoPair = "You won. You got at least two pairs.";

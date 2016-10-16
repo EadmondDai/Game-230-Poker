@@ -1,5 +1,16 @@
 #pragma once
 
+#define _CRTDBG_MAP_ALLOC
+#define _CRTDBG_MAP_ALLOC_NEW
+#include <cstdlib>
+#include <crtdbg.h>
+#ifdef _DEBUG
+#ifndef DBG_NEW
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+#define new DBG_NEW
+#endif
+#endif
+
 #include <string>
 #include <iostream>
 #include "DeckManager.h"
@@ -25,6 +36,8 @@ class GamePlay
 private:
 	char StartIndex = 'a';
 	int CardsInHand = 5;
+
+	int NumberOfEachSuit = 13;
 
 	DeckManager DeckManagerObj;
 
@@ -57,8 +70,14 @@ private:
 	string WinStraight;
 	string WinFlush;
 
+	// Related to cheat
+	string SelectACardToSwapDes;
+	string ValueYouWantDes;
+	string SuitYouWantDes;
+	string InvalidInput;
+	string DeckCardNotFount;
+
 	void PickCardsFromDeck(int cardNumber);
-	void DiscardUnwantedCard(); // Should not use index for this.
 	
 	void GetNewCards();
 
@@ -67,6 +86,8 @@ private:
 	bool CheckThreeKind();
 	bool CheckStraight();
 	bool CheckFlush();
+	void CheatSwap();
+	void DoSwap(Card *cardOne, Card* cardTwo);
 
 public:
 	void SetDeckManager(DeckManager obj);
@@ -75,6 +96,7 @@ public:
 	void MakeAChoice();
 	void GameResultCheck();
 	void InitCards();
+	void ClearCards();
 
 	bool IsInGame()
 	{
@@ -85,6 +107,8 @@ public:
 	{
 		GameState = 0;
 	}
+
+	int GetYourMoney() { return YourMoney; };
 
 	GamePlay();
 	~GamePlay();

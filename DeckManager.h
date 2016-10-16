@@ -1,3 +1,14 @@
+#define _CRTDBG_MAP_ALLOC
+#define _CRTDBG_MAP_ALLOC_NEW
+#include <cstdlib>
+#include <crtdbg.h>
+#ifdef _DEBUG
+#ifndef DBG_NEW
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+#define new DBG_NEW
+#endif
+#endif
+
 #pragma once
 #include <set>
 #include <random>
@@ -5,20 +16,19 @@
 #include <string>
 #include <iostream>
 
-
 using namespace std;
 
 // Suit name;
 static enum Suit
 {
-	Spade,     // ??
-	Heart,     // ??
-	Dianmond,  // ??
-	Club       // ??
+	Club,
+	Diamond,
+	Heart,
+	Spade
 };
 
 // Make this global
-static string MySuitName[] = { "Spade" , "Heart" , "Dianmond" , "Club" };
+static string MySuitName[] = {"Club", "Diamond", "Heart" , "Spade"};
 
 struct Card
 {
@@ -36,21 +46,22 @@ class DeckManager
 private:
 	int WarpNumber = 6;
 	int NumberOfEachSuit = 13;
-	Card * StartCard = nullptr;
+	Card * DeckFirstCard = nullptr;
 	Card * EndCard = nullptr;
 
-	void DiscardUnwantedCard();
-
 public:
-	void ResetDeck(Card *StartCard);
+	void ResetDeck(Card *DeckFirstCard);
 	void ClearDeck();
 	void ShowDeck();
 	
 	int GetNumbersOfCard();
 
-	Card *GetStartCard() { return StartCard; };
+	Card *GetStartCard() { return DeckFirstCard; };
 
 	Card *PickACard();
+
+	// Relation with each others remains in the returen card.
+	Card *PickACardWithNumAndSuit(int num, int suit);
 
 	// Card Showing Name
 	vector<string> CardShowVector;

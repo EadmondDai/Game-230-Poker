@@ -1,13 +1,25 @@
+#define _CRTDBG_MAP_ALLOC
+#define _CRTDBG_MAP_ALLOC_NEW
+#include <cstdlib>
+#include <crtdbg.h>
+#ifdef _DEBUG
+#ifndef DBG_NEW
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+#define new DBG_NEW
+#endif
+#endif
+
+
 #include "DeckManager.h"
 
 void DeckManager::ResetDeck(Card *FirstCard)
 {
 	ClearDeck();
-	int count = 0;
-
 	//DiscardUnwantedCard();
 
 	// If this is null, then just creat a whole new set of 
+	int resetOne = 0;
+	int resetTwo = 0;
 	if (FirstCard == nullptr)
 	{
 		for (int i = 0; i < NumberOfEachSuit; i++)
@@ -19,8 +31,8 @@ void DeckManager::ResetDeck(Card *FirstCard)
 				newCard->Number = i;
 				newCard->CardSuit = j;
 
-				if (StartCard == nullptr)
-					StartCard = newCard;
+				if (DeckFirstCard == nullptr)
+					DeckFirstCard = newCard;
 
 				if (EndCard == nullptr)
 				{
@@ -32,7 +44,7 @@ void DeckManager::ResetDeck(Card *FirstCard)
 					newCard->PrevieousCard = EndCard;
 					EndCard = newCard;
 				}
-				count++;
+				resetOne++;
 			}
 		}
 	}
@@ -61,8 +73,8 @@ void DeckManager::ResetDeck(Card *FirstCard)
 				newCard->Number = i;
 				newCard->CardSuit = j;
 
-				if (StartCard == nullptr)
-					StartCard = newCard;
+				if (DeckFirstCard == nullptr)
+					DeckFirstCard = newCard;
 
 				if (EndCard == nullptr)
 				{
@@ -74,75 +86,35 @@ void DeckManager::ResetDeck(Card *FirstCard)
 					newCard->PrevieousCard = EndCard;
 					EndCard = newCard;
 				}
-
+				resetTwo++;
 			}
 		}
 	}
-}
 
-
-void DeckManager::DiscardUnwantedCard()
-{
-	if (StartCard == nullptr)
-		return;
-
-	Card *tempCard = StartCard;
-
-	while (tempCard != nullptr)
-	{
-		//if (returnCard->IfKept == false)
-		//{
-			bool previeousHaveCard = tempCard->PrevieousCard != nullptr;
-			bool nextHaveCard = tempCard->NextCard != nullptr;
-
-			if (previeousHaveCard && nextHaveCard)
-			{
-				tempCard->PrevieousCard->NextCard = tempCard->NextCard;
-				tempCard->NextCard->PrevieousCard = tempCard->PrevieousCard;
-				Card *temp = tempCard;
-				tempCard = tempCard->NextCard;
-				delete temp;
-			}
-			else if (previeousHaveCard && !nextHaveCard)
-			{
-				tempCard->PrevieousCard->NextCard = nullptr;
-				delete tempCard;
-				tempCard = nullptr;
-			}
-			else if (!previeousHaveCard && nextHaveCard)
-			{
-				tempCard = tempCard->NextCard;
-				delete tempCard->PrevieousCard;
-				tempCard->PrevieousCard = nullptr;
-			}
-			else
-			{
-				delete tempCard;
-				tempCard = nullptr;
-			}
-		//}
-	}
+	cout << resetOne << resetTwo;
 }
 
 void DeckManager::ClearDeck()
 {
 	// Before reset, I should clear the deck before.
-	while (StartCard != nullptr)
+	int count = 0;
+	while (DeckFirstCard != nullptr)
 	{
-		Card *tempPtr = StartCard;
-		StartCard = StartCard->NextCard;
+		Card *tempPtr = DeckFirstCard;
+		DeckFirstCard = DeckFirstCard->NextCard;
 		delete tempPtr;
+		count++;
 	}
 	EndCard = nullptr;
 }
 
 int DeckManager::GetNumbersOfCard()
 {
-	if (StartCard == nullptr)
+	if (DeckFirstCard == nullptr)
 		return 0;
 
 	int cardCount = 1;
-	Card* tempCardPtr = StartCard;
+	Card* tempCardPtr = DeckFirstCard;
 	while (tempCardPtr -> NextCard != nullptr)
 	{
 		cardCount++;
@@ -154,9 +126,9 @@ int DeckManager::GetNumbersOfCard()
 Card *DeckManager::PickACard()
 {
 	int deckCards = GetNumbersOfCard();
-	Card *pickedCard = StartCard;
+	Card *pickedCard = DeckFirstCard;
 	int targetCount = rand();
-	targetCount = (targetCount % deckCards) - 1;
+	targetCount = (targetCount % deckCards);
 	while (targetCount > 0 )
 	{
 		pickedCard = pickedCard->NextCard;
@@ -178,12 +150,12 @@ Card *DeckManager::PickACard()
 	}
 	else if (!leftHave && rightHave)
 	{
-		StartCard = pickedCard->NextCard;
+		DeckFirstCard = pickedCard->NextCard;
 		pickedCard->NextCard->PrevieousCard = nullptr;
 	}
 	else
 	{
-		StartCard = EndCard = nullptr;
+		DeckFirstCard = EndCard = nullptr;
 	}
 
 	pickedCard->PrevieousCard = nullptr;
@@ -192,10 +164,27 @@ Card *DeckManager::PickACard()
 	return pickedCard;
 }
 
+Card *DeckManager::PickACardWithNumAndSuit(int num, int suit)
+{
+	Card *returnCard = DeckFirstCard;
+	while (returnCard != nullptr )
+	{
+		if (returnCard->Number == num && returnCard->CardSuit == suit)
+		{
+			return returnCard;
+		}
+		else
+		{
+			returnCard = returnCard->NextCard;
+		}
+	}
+	return returnCard;
+}
+
 void DeckManager::ShowDeck()
 {
 	// Use a temp pointer go through the pokers on player's hand.
-	Card *tempShowCard = StartCard;
+	Card *tempShowCard = DeckFirstCard;
 
 	int warpCount = WarpNumber;
 	while (tempShowCard != nullptr)
@@ -230,10 +219,10 @@ DeckManager::DeckManager()
 {
 	// Init random with time as seed.
 	srand((unsigned) time(NULL));
-	ResetDeck(nullptr);
+	//ResetDeck(nullptr);
 
 	CardShowVector.push_back("Ace");
-	for (int i = 1; i < 10; i++)
+	for (int i = 2; i <= 10; i++)
 	{
 		CardShowVector.push_back(to_string(i));
 	}
