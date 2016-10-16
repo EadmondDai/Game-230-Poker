@@ -24,7 +24,7 @@ void DeckManager::ResetDeck(Card *FirstCard)
 	{
 		for (int i = 0; i < NumberOfEachSuit; i++)
 		{
-			for (int j = Suit::Spade; j <= Suit::Club; j++)
+			for (int j = Suit::Club; j <= Suit::Spade; j++)
 			{
 				// Create the node then insert it into the deck.
 				Card *newCard = new Card;

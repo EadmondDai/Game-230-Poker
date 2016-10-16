@@ -520,7 +520,7 @@ void GamePlay::CheatSwap()
 
 	while (true)
 	{
-		cout << DeckNumberDes << endl;
+		cout << ValueYouWantDes << endl;
 
 		string SelectNumStr;
 		cin >> SelectNumStr;
@@ -595,8 +595,13 @@ void GamePlay::CheatSwap()
 
 void GamePlay::DoSwap(Card* cardOne, Card* cardTwo)
 {
-	Card* temp;
-	temp = cardOne;
+	// Make a copy of the changing card first.
+	Card* temp = new Card;
+	temp->Number = cardOne->Number;
+	temp->CardSuit = cardOne->CardSuit;
+	temp->PrevieousCard = cardOne->PrevieousCard;
+	temp->NextCard = cardOne->NextCard;
+	
 
 	// Move cardOne to cardTwo.
 	if (cardTwo->PrevieousCard != nullptr)
@@ -639,6 +644,7 @@ void GamePlay::DoSwap(Card* cardOne, Card* cardTwo)
 	{
 		cardTwo->NextCard = nullptr;
 	}
+	delete temp;
 }
 
 void GamePlay::InitCards()
