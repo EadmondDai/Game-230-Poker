@@ -142,8 +142,8 @@ void GamePlay::MakeAChoice()
 
 	if (command == ExitCommand)
 	{
+		DeckManagerObj.ClearDeck();
 		GameState = 0;
-		DeckManager deck = DeckManagerObj;
 		return;
 	}
 

@@ -17,29 +17,34 @@
 
 int main()
 {
-	cout << "Welcome to Video Poker!" << endl;
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	//{
+		cout << "Welcome to Video Poker!" << endl;
 
-	DeckManager DeckManagerObj;
-	GamePlay NewGame;
+		DeckManager DeckManagerObj;
+		GamePlay NewGame;
 
-	cout << "You started with $" << NewGame.GetYourMoney() << endl;
-	
-	NewGame.SetDeckManager(DeckManagerObj);
-	NewGame.InitCards();
+		cout << "You started with $" << NewGame.GetYourMoney() << endl;
 
-	while (NewGame.IsInGame())
-	{
-		NewGame.BetMoney();
-		NewGame.MakeAChoice();
-		NewGame.GameResultCheck();
-		system("pause");
-	}
+		NewGame.SetDeckManager(DeckManagerObj);
+		NewGame.InitCards();
 
-	DeckManagerObj.ClearDeck();
-	NewGame.ClearCards();
+		while (NewGame.IsInGame())
+		{
+			NewGame.BetMoney();
+			NewGame.MakeAChoice();
+			NewGame.GameResultCheck();
+			system("pause");
+		}
+
+		DeckManagerObj.ClearDeck();
+		NewGame.ClearCards();
+
 
 	//system("pause");
-	_CrtDumpMemoryLeaks();
+	//}
+
+	//_CrtDumpMemoryLeaks();
     return 0;
 }
 
