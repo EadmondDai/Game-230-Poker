@@ -730,6 +730,11 @@ void GamePlay::SortMyCards()
 	EndCard = tempEndCardFinder;
 }
 
+void GamePlay::SetMoney(int money)
+{
+	YourMoney = money;
+}
+
 GamePlay::GamePlay()
 {
 	//Prologue = "Welcome to Video Poker!";

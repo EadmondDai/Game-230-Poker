@@ -15,31 +15,58 @@
 #include "stdafx.h"
 #include "GamePlay.h"
 
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
 int main()
 {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//{
-		cout << "Welcome to Video Poker!" << endl;
+	cout << "Welcome to Video Poker!" << endl;
 
-		DeckManager DeckManagerObj;
-		GamePlay NewGame;
+	DeckManager DeckManagerObj;
+	GamePlay NewGame;
 
-		cout << "You started with $" << NewGame.GetYourMoney() << endl;
-
-		NewGame.SetDeckManager(DeckManagerObj);
-		NewGame.InitCards();
-
-		while (NewGame.IsInGame())
+	// Try to read the money from the file.
+	int moneyLeft = 0;
+	string line;
+	ifstream myFile ("money.txt");
+	if (myFile.is_open())
+	{
+		getline(myFile, line);
+		moneyLeft = stoi(line);
+		if (moneyLeft > 0)
 		{
-			NewGame.BetMoney();
-			NewGame.MakeAChoice();
-			NewGame.GameResultCheck();
-			system("pause");
+			NewGame.SetMoney(moneyLeft);
 		}
+		myFile.close();
+	}
 
-		DeckManagerObj.ClearDeck();
-		NewGame.ClearCards();
+	cout << "You started with $" << NewGame.GetYourMoney() << endl;
 
+	NewGame.SetDeckManager(DeckManagerObj);
+	NewGame.InitCards();
+
+	while (NewGame.IsInGame())
+	{
+		NewGame.BetMoney();
+		NewGame.MakeAChoice();
+		NewGame.GameResultCheck();
+		system("pause");
+	}
+
+	DeckManagerObj.ClearDeck();
+	NewGame.ClearCards();
+
+	// Try to write the money into the file.
+	// Remove the existing file first.
+	remove("money.txt");
+	ofstream mySaveFile;
+	mySaveFile.open("money.txt");
+	mySaveFile << NewGame.GetYourMoney() << endl;
+	mySaveFile.close();
 
 	//system("pause");
 	//}

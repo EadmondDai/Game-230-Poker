@@ -99,6 +99,8 @@ public:
 	void InitCards();
 	void ClearCards();
 
+	void SetMoney(int money);
+
 	bool IsInGame()
 	{
 		return GameState == 1;
