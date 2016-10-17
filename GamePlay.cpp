@@ -271,26 +271,31 @@ void GamePlay::GameResultCheck()
 	{
 		moneyEarned += 6;
 		isWinning = true;
+		cout << WinFlush << endl;
 	}
 	else if (CheckStraight())
 	{
 		moneyEarned += 4;
 		isWinning = true;
+		cout << WinStraight << endl;
 	}
 	else if (CheckThreeKind())
 	{
 		moneyEarned += 3;
 		isWinning = true;
+		cout << WinThreeKind << endl;
 	}
 	else if (CheckTwoPair())
 	{
 		moneyEarned += 2;
 		isWinning = true;
+		cout << WinTwoPair << endl;
 	}
 	else if (CheckOnePair())
 	{
 		moneyEarned += 1;
 		isWinning = true;
+		cout << WinOnePair << endl;
 	}
 	else 
 	{
@@ -413,13 +418,16 @@ bool GamePlay::CheckOnePair()
 	while (tempCard != nullptr)
 	{
 		int number = tempCard->Number;
-		if (checkMap.find(number) == checkMap.end())
+		if (number >= 10 || number == 0)
 		{
-			checkMap[number] = 1;
-		}
-		else
-		{
-			return true;
+			if (checkMap.find(number) == checkMap.end())
+			{
+				checkMap[number] = 1;
+			}
+			else
+			{
+				return true;
+			}
 		}
 		tempCard = tempCard->NextCard;
 	}
@@ -745,11 +753,11 @@ GamePlay::GamePlay()
 	InvalidInput = "Invalid input. See, even if you want to cheat, you still need to follow certain rules.";
 	DeckCardNotFount = "404 not found. Not sure what happened, but the card you want in the deck, is just a illusion, never existed.";
 
-	WinOnePair = "You won. You got at least one pair of jacks or higher";
-	WinTwoPair = "You won. You got at least two pairs.";
-	WinThreeKind = "You won. You got three of a kind";
-	WinStraight = "You won. You got at least a straight";
-	WinFlush = "You won. You got at least a flush";
+	WinOnePair = "You got at least one pair of jacks or higher";
+	WinTwoPair = "You got at least two pairs.";
+	WinThreeKind = "You got three of a kind";
+	WinStraight = "You got at least a straight";
+	WinFlush = "You got at least a flush";
 
 }
 

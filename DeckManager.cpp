@@ -17,9 +17,7 @@ void DeckManager::ResetDeck(Card *FirstCard)
 	ClearDeck();
 	//DiscardUnwantedCard();
 
-	// If this is null, then just creat a whole new set of 
-	int resetOne = 0;
-	int resetTwo = 0;
+	// If this is null, then just creat a whole new set.
 	if (FirstCard == nullptr)
 	{
 		for (int i = 0; i < NumberOfEachSuit; i++)
@@ -44,7 +42,6 @@ void DeckManager::ResetDeck(Card *FirstCard)
 					newCard->PrevieousCard = EndCard;
 					EndCard = newCard;
 				}
-				resetOne++;
 			}
 		}
 	}
@@ -86,12 +83,9 @@ void DeckManager::ResetDeck(Card *FirstCard)
 					newCard->PrevieousCard = EndCard;
 					EndCard = newCard;
 				}
-				resetTwo++;
 			}
 		}
 	}
-
-	cout << resetOne << resetTwo;
 }
 
 void DeckManager::ClearDeck()
