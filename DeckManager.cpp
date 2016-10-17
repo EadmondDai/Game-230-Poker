@@ -215,6 +215,7 @@ vector<string> DeckManager::GetCardShowVector()
 	return CardShowVector;
 }
 
+
 DeckManager::DeckManager()
 {
 	// Init random with time as seed.

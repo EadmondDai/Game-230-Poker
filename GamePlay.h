@@ -88,6 +88,7 @@ private:
 	bool CheckFlush();
 	void CheatSwap();
 	void DoSwap(Card *cardOne, Card* cardTwo);
+	void SortMyCards();
 
 public:
 	void SetDeckManager(DeckManager obj);

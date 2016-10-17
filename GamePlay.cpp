@@ -32,6 +32,9 @@ void GamePlay::ShowHand()
 
 	cout << endl << YoursCardDes << endl;
 
+	// Sort my card.
+	SortMyCards();
+
 	// Use a temp pointer go through the pokers on player's hand.
 	Card *tempShowCard = StartCard;
 
@@ -655,6 +658,68 @@ void GamePlay::InitCards()
 void GamePlay::SetDeckManager(DeckManager obj)
 {
 	DeckManagerObj = obj;
+}
+
+void GamePlay::SortMyCards()
+{
+	// Using Bubble up method for this.
+	// Basic idea is use another pointer pointed to the card. Then try to find the suitable position before itself and inserted it in.
+
+	// StartCard is considered already sorted.
+	Card *toBeSortCard = StartCard->NextCard;
+	Card *nextSortCard = toBeSortCard->NextCard;
+
+	while (toBeSortCard != nullptr)
+	{
+		// Then find a node before nextSortCard that is suitabel for insertion.
+		Card *posiFindCard = toBeSortCard->PrevieousCard;
+
+		// Cut the toBeSortCard out first.
+		toBeSortCard->PrevieousCard->NextCard = toBeSortCard->NextCard;
+		if(toBeSortCard->NextCard != nullptr)
+			toBeSortCard->NextCard->PrevieousCard = toBeSortCard->PrevieousCard;
+		toBeSortCard->PrevieousCard = nullptr;
+		toBeSortCard->NextCard = nullptr;
+
+		while (posiFindCard != nullptr)
+		{
+			// Compare the value and suit for the two card.
+			// If found the card value is lower than mind, inerst behind it.
+			if ((toBeSortCard->Number + 1 ) * 10 + toBeSortCard->CardSuit >= (posiFindCard->Number + 1) * 10 + posiFindCard->CardSuit)
+			{
+				// Get the toBeSortedCard in front of posiFindCard
+				toBeSortCard->PrevieousCard = posiFindCard;
+				toBeSortCard->NextCard = posiFindCard->NextCard;
+				
+				if (posiFindCard->NextCard != nullptr)
+				{
+					posiFindCard->NextCard->PrevieousCard = toBeSortCard;
+				}
+				posiFindCard->NextCard = toBeSortCard;
+				break;
+			}
+			else if (posiFindCard->PrevieousCard == nullptr)
+			{
+				toBeSortCard->NextCard = posiFindCard;
+				posiFindCard->PrevieousCard = toBeSortCard;
+				StartCard = toBeSortCard;
+				break;
+			}
+			posiFindCard = posiFindCard->PrevieousCard;
+		}
+
+		toBeSortCard = nextSortCard;
+		if(nextSortCard != nullptr)
+			nextSortCard = nextSortCard->NextCard;
+	}
+
+	Card *tempEndCardFinder = StartCard;
+
+	while (tempEndCardFinder->NextCard != nullptr)
+	{
+		tempEndCardFinder = tempEndCardFinder->NextCard;
+	}
+	EndCard = tempEndCardFinder;
 }
 
 GamePlay::GamePlay()

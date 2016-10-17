@@ -53,7 +53,7 @@ public:
 	void ResetDeck(Card *DeckFirstCard);
 	void ClearDeck();
 	void ShowDeck();
-	
+
 	int GetNumbersOfCard();
 
 	Card *GetStartCard() { return DeckFirstCard; };
