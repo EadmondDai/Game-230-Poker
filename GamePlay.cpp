@@ -516,9 +516,12 @@ void GamePlay::CheatSwap()
 		}
 		else
 		{
-			int count = StartIndex + CardsInHand - SelectCardStr[0];
+			cout << StartIndex << endl;
+			cout << CardsInHand << endl;
+			cout << SelectCardStr[0] << endl;
+
+			int count = SelectCardStr[0] - StartIndex;
 			Card *temp = StartCard;
-			count--;
 			while (count > 0)
 			{
 				temp = temp->NextCard;
